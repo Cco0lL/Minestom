@@ -292,6 +292,7 @@ public final class Registry {
         private final boolean isFood;
         private final Supplier<Block> blockSupplier;
         private final EquipmentSlot equipmentSlot;
+        private final int digLevel;
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
@@ -319,6 +320,10 @@ public final class Registry {
                 } else {
                     this.equipmentSlot = null;
                 }
+            }
+            {
+                final Properties toolProperties = main.section("toolProperties");
+                this.digLevel = toolProperties == null ? 0 : toolProperties.getInt("digLevel");
             }
         }
 
@@ -356,6 +361,10 @@ public final class Registry {
 
         public @Nullable EquipmentSlot equipmentSlot() {
             return equipmentSlot;
+        }
+
+        public int digLevel() {
+            return digLevel;
         }
 
         @Override
