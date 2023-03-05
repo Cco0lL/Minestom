@@ -1,6 +1,7 @@
 plugins {
     `java-library`
-    id("minestom.publishing-conventions")
+//    id("minestom.publishing-conventions")
+    `maven-publish`
     id("minestom.native-conventions")
     alias(libs.plugins.blossom)
 }
@@ -97,3 +98,14 @@ dependencies {
     api("io.github.jglrxavpok.hephaistos:gson:${libs.versions.hephaistos.get()}")
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "net.minestom"
+            artifactId = "minestom"
+            version = "1.0"
+
+            from(components["java"])
+        }
+    }
+}

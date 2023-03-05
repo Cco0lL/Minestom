@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public final class Registry {
     @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull Properties main) {
-        return new BlockEntry(namespace, main, null);
+        return new BlockEntry(namespace, main, new PropertiesMap(new HashMap<>()));
     }
 
     @ApiStatus.Internal
@@ -292,6 +292,7 @@ public final class Registry {
         private final boolean isFood;
         private final Supplier<Block> blockSupplier;
         private final EquipmentSlot equipmentSlot;
+        private final int digLevel;
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
@@ -319,6 +320,10 @@ public final class Registry {
                 } else {
                     this.equipmentSlot = null;
                 }
+            }
+            {
+                final Properties toolProperties = main.section("toolProperties");
+                this.digLevel = toolProperties == null ? 0 : toolProperties.getInt("digLevel");
             }
         }
 
@@ -356,6 +361,10 @@ public final class Registry {
 
         public @Nullable EquipmentSlot equipmentSlot() {
             return equipmentSlot;
+        }
+
+        public int digLevel() {
+            return digLevel;
         }
 
         @Override
@@ -454,6 +463,7 @@ public final class Registry {
     }
 
     record PropertiesMap(Map<String, Object> map) implements Properties {
+
         @Override
         public String getString(String name, String defaultValue) {
             var element = element(name);
@@ -499,6 +509,11 @@ public final class Registry {
         }
 
         @Override
+        public void setProperty(String name, Object value) {
+            map.put(name, value);
+        }
+
+        @Override
         public Properties section(String name) {
             Map<String, Object> map = element(name);
             if (map == null) return null;
@@ -536,6 +551,8 @@ public final class Registry {
         boolean getBoolean(String name, boolean defaultValue);
 
         boolean getBoolean(String name);
+
+        void setProperty(String name, Object value);
 
         Properties section(String name);
 
