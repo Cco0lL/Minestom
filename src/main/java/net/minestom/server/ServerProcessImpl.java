@@ -234,7 +234,7 @@ final class ServerProcessImpl implements ServerProcess {
             MinestomTerminal.start();
         }
         // Stop the server on SIGINT
-        Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
+//        Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
 
     @Override
